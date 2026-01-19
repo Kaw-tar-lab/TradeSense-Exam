@@ -18,69 +18,81 @@ const Signup: React.FC = () => {
     phone: '',
     country: ''
   });
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
     }
-    
+
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
     }
-    
+
     if (!formData.country.trim()) {
       newErrors.country = 'Country is required';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  /* import { registerUser } from '../services/api'; */
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      // Real API Register
+      const { registerUser } = await import('../services/api');
+      const fullName = `${formData.firstName} ${formData.lastName}`;
+      const response = await registerUser(fullName, formData.email, formData.password);
+
+      if (response && (response.id || response.status === 'ok' || response.email)) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
+      } else {
+        alert('Erreur: ' + JSON.stringify(response));
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert('Erreur serveur ou email déjà utilisé.');
+    } finally {
       setIsLoading(false);
-      setIsSuccess(true);
-      
-      // Auto redirect to dashboard after success
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 3000);
-    }, 2000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +101,7 @@ const Signup: React.FC = () => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -127,13 +139,13 @@ const Signup: React.FC = () => {
       <div className="w-full max-w-md">
         {/* Logo / Back Link */}
         <div className="mb-8 flex flex-col items-center">
-          <button 
+          <button
             onClick={() => navigate('/login')}
             className={`flex items-center gap-2 text-sm mb-6 transition-colors ${darkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
           >
             <span>←</span> {t('back')}
           </button>
-          
+
           <div className="flex items-center gap-2 mb-2">
             <div className="w-10 h-10 bg-[#eab308] rounded-xl flex items-center justify-center font-bold text-black shadow-lg shadow-yellow-500/20 text-xl">TS</div>
             <span className={`text-2xl font-bold tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -158,20 +170,19 @@ const Signup: React.FC = () => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                    errors.firstName 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : darkMode 
-                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]' 
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.firstName
+                      ? 'border-red-500 focus:border-red-500'
+                      : darkMode
+                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]'
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308]'
-                  }`}
+                    }`}
                   placeholder="John"
                 />
                 {errors.firstName && (
                   <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
                 )}
               </div>
-              
+
               <div>
                 <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
                   {t('signup.last_name')}
@@ -181,13 +192,12 @@ const Signup: React.FC = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                    errors.lastName 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : darkMode 
-                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]' 
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.lastName
+                      ? 'border-red-500 focus:border-red-500'
+                      : darkMode
+                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]'
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308]'
-                  }`}
+                    }`}
                   placeholder="Doe"
                 />
                 {errors.lastName && (
@@ -205,13 +215,12 @@ const Signup: React.FC = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                  errors.email 
-                    ? 'border-red-500 focus:border-red-500' 
-                    : darkMode 
-                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]' 
+                className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.email
+                    ? 'border-red-500 focus:border-red-500'
+                    : darkMode
+                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]'
                       : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308]'
-                }`}
+                  }`}
                 placeholder="john@example.com"
               />
               {errors.email && (
@@ -229,20 +238,19 @@ const Signup: React.FC = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                    errors.password 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : darkMode 
-                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]' 
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.password
+                      ? 'border-red-500 focus:border-red-500'
+                      : darkMode
+                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]'
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308]'
-                  }`}
+                    }`}
                   placeholder="••••••••"
                 />
                 {errors.password && (
                   <p className="text-red-500 text-xs mt-1">{errors.password}</p>
                 )}
               </div>
-              
+
               <div>
                 <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
                   {t('signup.confirm_password')}
@@ -252,13 +260,12 @@ const Signup: React.FC = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                    errors.confirmPassword 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : darkMode 
-                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]' 
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.confirmPassword
+                      ? 'border-red-500 focus:border-red-500'
+                      : darkMode
+                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]'
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308]'
-                  }`}
+                    }`}
                   placeholder="••••••••"
                 />
                 {errors.confirmPassword && (
@@ -277,20 +284,19 @@ const Signup: React.FC = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                    errors.phone 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : darkMode 
-                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]' 
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.phone
+                      ? 'border-red-500 focus:border-red-500'
+                      : darkMode
+                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]'
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308]'
-                  }`}
+                    }`}
                   placeholder="+1 234 567 8900"
                 />
                 {errors.phone && (
                   <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
                 )}
               </div>
-              
+
               <div>
                 <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
                   {t('signup.country')}
@@ -300,13 +306,12 @@ const Signup: React.FC = () => {
                   name="country"
                   value={formData.country}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                    errors.country 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : darkMode 
-                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]' 
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${errors.country
+                      ? 'border-red-500 focus:border-red-500'
+                      : darkMode
+                        ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308]'
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308]'
-                  }`}
+                    }`}
                   placeholder="United States"
                 />
                 {errors.country && (
@@ -318,11 +323,10 @@ const Signup: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-4 rounded-xl font-black transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
-                isLoading 
-                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed' 
+              className={`w-full py-4 rounded-xl font-black transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${isLoading
+                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/20'
-              }`}
+                }`}
             >
               {isLoading ? (
                 <>

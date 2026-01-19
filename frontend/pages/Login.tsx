@@ -14,14 +14,31 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  /* import { loginUser } from '../services/api'; */ /* Ensure import is added or updated manually if needed, but here we assume it's available or we add it */
+
+  // ... (inside component)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate login
-    setTimeout(() => {
+    try {
+      // Real API Login
+      const { loginUser } = await import('../services/api');
+      const response = await loginUser(email, password);
+
+      if (response.status === 'ok') {
+        // Save user info
+        localStorage.setItem('user', JSON.stringify(response.user));
+        // Navigate to dashboard
+        navigate('/dashboard');
+      } else {
+        alert('Erreur de connexion: ' + (response.error || 'Inconnue'));
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert('Erreur réseau ou mauvais identifiants');
+    } finally {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 1500);
+    }
   };
 
   return (
@@ -29,13 +46,13 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md">
         {/* Logo / Back Link */}
         <div className="mb-8 flex flex-col items-center">
-          <button 
+          <button
             onClick={() => navigate('/')}
             className={`flex items-center gap-2 text-sm mb-6 transition-colors ${darkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
           >
             <span>←</span> {t('back')}
           </button>
-          
+
           <div className="flex items-center gap-2 mb-2">
             <div className="w-10 h-10 bg-[#eab308] rounded-xl flex items-center justify-center font-bold text-black shadow-lg shadow-yellow-500/20 text-xl">TS</div>
             <span className={`text-2xl font-bold tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -60,11 +77,10 @@ const Login: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`w-full pl-4 pr-4 py-3 rounded-xl border outline-none transition-all ${
-                    darkMode 
-                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]' 
+                  className={`w-full pl-4 pr-4 py-3 rounded-xl border outline-none transition-all ${darkMode
+                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
                       : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
-                  }`}
+                    }`}
                   placeholder={t('login.email_placeholder')}
                 />
               </div>
@@ -85,11 +101,10 @@ const Login: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`w-full pl-4 pr-4 py-3 rounded-xl border outline-none transition-all ${
-                    darkMode 
-                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]' 
+                  className={`w-full pl-4 pr-4 py-3 rounded-xl border outline-none transition-all ${darkMode
+                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
                       : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
-                  }`}
+                    }`}
                   placeholder={t('login.password_placeholder')}
                 />
               </div>
@@ -109,11 +124,10 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-4 rounded-xl font-black transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
-                isLoading 
-                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed' 
+              className={`w-full py-4 rounded-xl font-black transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${isLoading
+                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
                   : 'bg-[#eab308] hover:bg-[#d9a306] text-black shadow-lg shadow-yellow-500/20'
-              }`}
+                }`}
             >
               {isLoading ? (
                 <>
@@ -130,7 +144,7 @@ const Login: React.FC = () => {
             <p className={`text-sm mb-4 ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
               {t('login.no_account')}
             </p>
-            <button 
+            <button
               onClick={() => navigate('/signup')}
               className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20"
             >

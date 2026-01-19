@@ -11,6 +11,16 @@ export const api = axios.create({
   timeout: 10000,
 });
 
+export const loginUser = async (email: string, password: string) => {
+  const { data } = await api.post('/users/login', { email, password });
+  return data;
+};
+
+export const registerUser = async (name: string, email: string, password: string) => {
+  const { data } = await api.post('/users/register', { name, email, password });
+  return data;
+};
+
 export const getPrice = async (ticker: string) => {
   const { data } = await api.get(`/price/${encodeURIComponent(ticker)}`);
   return data as { ticker: string; price: number; time: string };
