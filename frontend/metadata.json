@@ -1,0 +1,9 @@
+
+{
+  "name": "TradeSense AI - Prop Trading Platform",
+  "description": "La première Prop Firm assistée par IA pour l'Afrique, combinant analyses en temps réel, défis de trading et éducation premium.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

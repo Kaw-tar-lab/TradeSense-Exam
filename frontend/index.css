@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: black;
+  /* Base fallthrough */
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(2, 6, 23, 0.7), rgba(2, 6, 23, 0.7)), url('/background.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  pointer-events: none;
+  transition: background-image 0.5s ease-in-out;
+}
+
+body.dashboard-theme::before {
+  background-image: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.85)), url('/dashboard_bg.png');
+}
+
+body.learning-theme::before {
+  background-image: linear-gradient(rgba(2, 6, 23, 0.8), rgba(2, 6, 23, 0.8)), url('/learning_bg.png');
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
