@@ -3,7 +3,8 @@ import axios from 'axios';
 // Make API base URL dynamic to support access from other devices on the LAN.
 // If VITE_API_BASE_URL is provided, use it; otherwise, infer from current hostname.
 const HOST = typeof window !== 'undefined' && window.location?.hostname ? window.location.hostname : 'localhost';
-const API_BASE = (import.meta as any)?.env?.VITE_API_BASE_URL || `http://${HOST}:5000/api`;
+const isProd = import.meta.env.PROD;
+const API_BASE = (import.meta as any)?.env?.VITE_API_BASE_URL || (isProd ? 'https://tradesense-exam.onrender.com/api' : `http://${HOST}:5000/api`);
 
 export const api = axios.create({
   baseURL: API_BASE,
