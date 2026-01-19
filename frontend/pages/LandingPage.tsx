@@ -1,16 +1,16 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CHALLENGE_TIERS } from '../constants';
-import CreativeImage from '../components/CreativeImage';
-import Illustration from '../components/Illustration';
-import Icon from '../components/Icon';
-import PageHeader from '../components/visual/PageHeader';
-import { useLanguage } from '../context/LanguageContext';
-import LanguageSwitcher from '../components/LanguageSwitcher';
-import { useTheme } from '../context/ThemeContext';
-import ThemeToggle from '../components/ThemeToggle';
-import MarketTicker from '../components/MarketTicker';
+import { CHALLENGE_TIERS } from '@/constants';
+import CreativeImage from '@/components/CreativeImage';
+import Illustration from '@/components/Illustration';
+import Icon from '@/components/Icon';
+import PageHeader from '@/components/visual/PageHeader';
+import { useLanguage } from '@/context/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useTheme } from '@/context/ThemeContext';
+import ThemeToggle from '@/components/ThemeToggle';
+import MarketTicker from '@/components/MarketTicker';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const LandingPage: React.FC = () => {
   const { theme } = useTheme();
 
   return (
-    <div 
+    <div
       className={`min-h-screen transition-colors duration-300 relative ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'}`}
       style={{
         backgroundImage: `linear-gradient(${theme === 'dark' ? 'rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95)' : 'rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.95)'}), url("/hero-bg.jpg")`,
@@ -102,8 +102,8 @@ const LandingPage: React.FC = () => {
             <button
               onClick={() => navigate('/learning')}
               className={`w-full sm:w-auto px-8 py-4 border rounded-xl font-bold transition-all ${theme === 'dark'
-                  ? 'bg-slate-900 border-slate-800 hover:bg-slate-800 text-white'
-                  : 'bg-white border-slate-200 hover:bg-slate-100 text-slate-900 shadow-sm'
+                ? 'bg-slate-900 border-slate-800 hover:bg-slate-800 text-white'
+                : 'bg-white border-slate-200 hover:bg-slate-100 text-slate-900 shadow-sm'
                 }`}
             >
               {t('hero.masterclass')}
