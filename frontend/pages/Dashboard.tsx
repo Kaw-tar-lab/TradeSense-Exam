@@ -12,7 +12,6 @@ import BalanceStatus from '../components/BalanceStatus';
 import Notifications, { NotificationItem } from '../components/Notifications';
 import NewsHub from '../components/NewsHub';
 import CommunityZone from '../components/CommunityZone';
-import RiskAnalysis from '../components/RiskAnalysis';
 import PageHeader from '../components/visual/PageHeader';
 import Modal from '../components/Modal';
 import AIChat from '../components/AIChat';
@@ -45,6 +44,7 @@ const Dashboard: React.FC = () => {
 
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'Positions' | 'News' | 'Social' | 'Leaderboard' | 'Alerts'>('Positions');
+  const [timeframe, setTimeframe] = useState('15m');
 
   // Seed one system notification to avoid empty panel in dev/demo
   useEffect(() => {
@@ -77,7 +77,7 @@ const Dashboard: React.FC = () => {
       }
     };
     pollSelected();
-    const id = setInterval(pollSelected, 10000);
+    const id = setInterval(pollSelected, 3000);
     return () => { mounted = false; clearInterval(id); };
   }, [selectedAsset.symbol]);
 
@@ -174,14 +174,8 @@ const Dashboard: React.FC = () => {
         <div className="flex items-center gap-4">
           <BalanceStatus />
           <div className="hidden md:block h-8 w-px bg-slate-800 mx-2" />
-          <button
-            onClick={() => {
-              localStorage.removeItem('user');
-              navigate('/');
-            }}
-            className={`text-sm font-bold px-4 py-2 rounded-lg transition-all ${darkMode ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20' : 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'}`}
-          >
-            {t('dashboard.logout') || 'Déconnexion'}
+          <button onClick={() => navigate('/')} className={`text-sm font-bold px-4 py-2 rounded-lg transition-all ${darkMode ? 'bg-white/5 hover:bg-white/10 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>
+            {t('dashboard.exit')}
           </button>
         </div>
       </nav>
@@ -249,7 +243,13 @@ const Dashboard: React.FC = () => {
             <div className="flex items-center gap-2">
               <div className={`flex p-1 rounded-lg border transition-colors duration-300 ${darkMode ? 'bg-slate-800/50 border-white/5' : 'bg-slate-200 border-slate-300'}`}>
                 {['1m', '5m', '15m', '1h', '4h', '1D'].map(tf => (
-                  <button key={tf} className={`px-3 py-1 text-[10px] font-black rounded transition-all ${tf === '15m' ? 'bg-[#eab308] text-black shadow-lg shadow-yellow-500/20' : (darkMode ? 'text-slate-500 hover:text-white' : 'text-slate-500 hover:text-slate-900')}`}>{tf}</button>
+                  <button
+                    key={tf}
+                    onClick={() => setTimeframe(tf)}
+                    className={`px-3 py-1 text-[10px] font-black rounded transition-all ${timeframe === tf ? 'bg-[#eab308] text-black shadow-lg shadow-yellow-500/20' : (darkMode ? 'text-slate-500 hover:text-white' : 'text-slate-500 hover:text-slate-900')}`}
+                  >
+                    {tf}
+                  </button>
                 ))}
               </div>
             </div>
@@ -261,7 +261,7 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 min-h-[500px]">
               <div className="lg:col-span-3 flex flex-col gap-4">
                 <div className={`flex-grow border rounded-2xl overflow-hidden relative group transition-colors duration-300 ${darkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
-                  <TradingChart symbol={selectedAsset.symbol} price={selectedAsset.price} />
+                  <TradingChart symbol={selectedAsset.symbol} price={selectedAsset.price} timeframe={timeframe} />
                 </div>
               </div>
 
@@ -441,10 +441,7 @@ const Dashboard: React.FC = () => {
         )}
 
         {/* Placeholder content for other modals */}
-        {activeModal === 'RISK_ALERT' && <RiskAnalysis />}
-
-        {/* Placeholder content for other modals */}
-        {['STRATEGY', 'ALERT'].includes(activeModal || '') && (
+        {['RISK_ALERT', 'STRATEGY', 'ALERT'].includes(activeModal || '') && (
           <div className="space-y-4">
             <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
               <h4 className="font-bold text-lg mb-2">{t('dashboard.modal_details')} {activeModal?.replace('_', ' ')}</h4>

@@ -6,9 +6,10 @@ import { useTheme } from '../context/ThemeContext';
 interface TradingChartProps {
   symbol: string;
   price: number;
+  timeframe: string;
 }
 
-const TradingChart: React.FC<TradingChartProps> = ({ symbol, price }) => {
+const TradingChart: React.FC<TradingChartProps> = ({ symbol, price, timeframe }) => {
   const { t } = useLanguage();
   const { theme } = useTheme();
   const darkMode = theme === 'dark';
@@ -64,8 +65,20 @@ const TradingChart: React.FC<TradingChartProps> = ({ symbol, price }) => {
         const now = Math.floor(Date.now() / 1000) as UTCTimestamp;
         const candles: CandlestickData[] = [];
         let prevClose = price || 100;
+
+        // Determine interval in seconds based on timeframe prop
+        const timeframeMap: Record<string, number> = {
+          '1m': 60,
+          '5m': 300,
+          '15m': 900,
+          '1h': 3600,
+          '4h': 14400,
+          '1D': 86400,
+        };
+        const intervalSeconds = timeframeMap[timeframe] || 900; // Default to 15m if not found
+
         for (let i = 0; i < 120; i++) {
-          const t_val = (now - (120 - i) * 60) as UTCTimestamp;
+          const t_val = (now - (120 - i) * intervalSeconds) as UTCTimestamp;
           const open = prevClose * (1 + (Math.random() - 0.5) * 0.004);
           const close = open * (1 + (Math.random() - 0.5) * 0.01);
           const high = Math.max(open, close) * (1 + Math.random() * 0.004);
@@ -118,7 +131,7 @@ const TradingChart: React.FC<TradingChartProps> = ({ symbol, price }) => {
         chartRef.current?.remove?.();
       } catch { }
     };
-  }, [symbol, darkMode]);
+  }, [symbol, darkMode, timeframe]);
 
   // Update chart options when dark mode changes
   useEffect(() => {
