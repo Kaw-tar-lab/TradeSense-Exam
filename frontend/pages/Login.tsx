@@ -35,7 +35,13 @@ const Login: React.FC = () => {
       }
     } catch (err: any) {
       console.error(err);
-      alert('Erreur réseau ou mauvais identifiants');
+      let msg = 'Erreur inconnue';
+      if (err.response) {
+        msg = `Server Error: ${err.response.status} - ${JSON.stringify(err.response.data)}`;
+      } else if (err.message) {
+        msg = `Network/Client Error: ${err.message}`;
+      }
+      alert(`Debug Info:\n${msg}\nAPI URL: ${import.meta.env.PROD ? 'PROD Mode' : 'DEV Mode'}`);
     } finally {
       setIsLoading(false);
     }
@@ -78,8 +84,8 @@ const Login: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`w-full pl-4 pr-4 py-3 rounded-xl border outline-none transition-all ${darkMode
-                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
-                      : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
+                    ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
+                    : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
                     }`}
                   placeholder={t('login.email_placeholder')}
                 />
@@ -102,8 +108,8 @@ const Login: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className={`w-full pl-4 pr-4 py-3 rounded-xl border outline-none transition-all ${darkMode
-                      ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
-                      : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
+                    ? 'bg-slate-800 border-slate-700 text-white focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
+                    : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308]'
                     }`}
                   placeholder={t('login.password_placeholder')}
                 />
@@ -125,8 +131,8 @@ const Login: React.FC = () => {
               type="submit"
               disabled={isLoading}
               className={`w-full py-4 rounded-xl font-black transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${isLoading
-                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
-                  : 'bg-[#eab308] hover:bg-[#d9a306] text-black shadow-lg shadow-yellow-500/20'
+                ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                : 'bg-[#eab308] hover:bg-[#d9a306] text-black shadow-lg shadow-yellow-500/20'
                 }`}
             >
               {isLoading ? (
