@@ -11,25 +11,11 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useTheme } from '@/context/ThemeContext';
 import ThemeToggle from '@/components/ThemeToggle';
 import MarketTicker from '@/components/MarketTicker';
-import { useState, useEffect } from 'react';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
-
   const { theme } = useTheme();
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        console.error('Invalid user data', e);
-      }
-    }
-  }, []);
 
   return (
     <div
@@ -61,59 +47,22 @@ const LandingPage: React.FC = () => {
 
               <LanguageSwitcher />
 
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
 
+              <button
+                onClick={() => navigate('/login')}
+                className={`px-4 py-2 text-sm font-bold border rounded-full transition-all hover:bg-yellow-500/10 ${theme === 'dark' ? 'border-white/20 text-white' : 'border-slate-300 text-slate-700'
+                  }`}
+              >
+                {t('nav.login')}
+              </button>
 
-              <ThemeToggle />
-
-              {user ? (
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-xs font-bold text-black border border-yellow-300 shadow-lg">
-                      {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                    </div>
-                    <span className={`text-sm font-bold hidden lg:block ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                      {user.name?.split(' ')[0]}
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="bg-[#eab308] hover:bg-[#d9a306] text-black px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-yellow-500/20"
-                  >
-                    {t('nav.dashboard')}
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      localStorage.removeItem('user');
-                      setUser(null);
-                      navigate('/');
-                    }}
-                    className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-red-500/20 text-red-400' : 'hover:bg-red-100 text-red-600'}`}
-                    title="Déconnexion"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <button
-                    onClick={() => navigate('/login')}
-                    className={`px-4 py-2 text-sm font-bold border rounded-full transition-all hover:bg-yellow-500/10 ${theme === 'dark' ? 'border-white/20 text-white' : 'border-slate-300 text-slate-700'
-                      }`}
-                  >
-                    {t('nav.login')}
-                  </button>
-
-                  <button
-                    onClick={() => navigate('/signup')}
-                    className="bg-[#eab308] hover:bg-[#d9a306] text-black px-5 py-2 rounded-full text-sm font-extrabold transition-all hover:scale-105 shadow-lg shadow-yellow-500/20"
-                  >
-                    {t('nav.start_now') || 'Commencer'}
-                  </button>
-                </>
-              )}
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="bg-[#eab308] hover:bg-[#d9a306] text-black px-5 py-2 rounded-full text-sm font-extrabold transition-all hover:scale-105"
+              >
+                {t('nav.dashboard')}
+              </button>
             </div>
           </div>
         </div>
