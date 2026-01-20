@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import GroupCard from './GroupCard';
 import DiscussionModal from './DiscussionModal';
 import { useLanguage } from '../context/LanguageContext';
@@ -10,6 +10,7 @@ const CommunityZone: React.FC<{ minimized?: boolean }> = ({ minimized = false })
   const { theme } = useTheme();
   const darkMode = theme === 'dark';
   const [isDiscussionOpen, setIsDiscussionOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className={`transition-colors duration-300 border rounded-2xl overflow-hidden ${darkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
       }`}>
@@ -29,7 +30,7 @@ const CommunityZone: React.FC<{ minimized?: boolean }> = ({ minimized = false })
           <li>{t('community_zone.feature_4')}</li>
         </ul>
         <div className="flex gap-2 pt-2">
-          <button onClick={() => alert(t('community_zone.join_soon_alert'))} className="text-sm bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded font-bold">{t('community_zone.join_group')}</button>
+          <button onClick={() => navigate('/community')} className="text-sm bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded font-bold">{t('community_zone.join_group')}</button>
           <button onClick={() => {
             navigator.clipboard.writeText('https://tradesense.app/join/community');
             alert(t('community_zone.invite_copied_alert'));
@@ -47,8 +48,8 @@ const CommunityZone: React.FC<{ minimized?: boolean }> = ({ minimized = false })
               { name: t('community_zone.groups.tech_name'), members: 256, description: t('community_zone.groups.tech_desc'), tag: "Tech" },
               { name: t('community_zone.groups.macro_name'), members: 173, description: t('community_zone.groups.macro_desc'), tag: "Indices" }
             ]).map((g, index) => (
-              <GroupCard 
-                key={`${g.name}-${index}`} 
+              <GroupCard
+                key={`${g.name}-${index}`}
                 name={g.name}
                 members={g.members}
                 description={g.description}
@@ -56,7 +57,7 @@ const CommunityZone: React.FC<{ minimized?: boolean }> = ({ minimized = false })
               />
             ))}
           </div>
-          <div 
+          <div
             onClick={() => setIsDiscussionOpen(true)}
             className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg cursor-pointer hover:bg-blue-500/20 transition-all group"
           >
@@ -82,8 +83,8 @@ const CommunityZone: React.FC<{ minimized?: boolean }> = ({ minimized = false })
           {t('community_zone.coming_soon')}
         </div>
       </div>
-      
-      <DiscussionModal 
+
+      <DiscussionModal
         isOpen={isDiscussionOpen}
         onClose={() => setIsDiscussionOpen(false)}
         discussionTitle="Trending Discussion"
