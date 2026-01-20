@@ -12,6 +12,7 @@ import BalanceStatus from '../components/BalanceStatus';
 import Notifications, { NotificationItem } from '../components/Notifications';
 import NewsHub from '../components/NewsHub';
 import CommunityZone from '../components/CommunityZone';
+import RiskAnalysis from '../components/RiskAnalysis';
 import PageHeader from '../components/visual/PageHeader';
 import Modal from '../components/Modal';
 import AIChat from '../components/AIChat';
@@ -221,8 +222,8 @@ const Dashboard: React.FC = () => {
               )}
             </div>
             <div className={`text-xs w-full px-3 py-2 rounded-xl border flex items-center justify-center gap-2 font-black uppercase tracking-tighter shadow-sm transition-all ${challenge.status === ChallengeStatus.ACTIVE ? (darkMode ? 'bg-[#eab308]/10 border-[#eab308]/20 text-[#eab308]' : 'bg-[#eab308]/20 border-[#eab308]/30 text-yellow-700') :
-                challenge.status === ChallengeStatus.PASSED ? (darkMode ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-600') :
-                  (darkMode ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-red-50 border-red-200 text-red-600')
+              challenge.status === ChallengeStatus.PASSED ? (darkMode ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-600') :
+                (darkMode ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-red-50 border-red-200 text-red-600')
               }`}>
               <div className={`w-2 h-2 rounded-full bg-current ${challenge.status === ChallengeStatus.ACTIVE ? 'animate-ping' : ''}`} />
               {challenge.status}
@@ -440,7 +441,10 @@ const Dashboard: React.FC = () => {
         )}
 
         {/* Placeholder content for other modals */}
-        {['RISK_ALERT', 'STRATEGY', 'ALERT'].includes(activeModal || '') && (
+        {activeModal === 'RISK_ALERT' && <RiskAnalysis />}
+
+        {/* Placeholder content for other modals */}
+        {['STRATEGY', 'ALERT'].includes(activeModal || '') && (
           <div className="space-y-4">
             <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
               <h4 className="font-bold text-lg mb-2">{t('dashboard.modal_details')} {activeModal?.replace('_', ' ')}</h4>
