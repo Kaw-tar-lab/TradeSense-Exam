@@ -1,6 +1,6 @@
 import { api } from './api';
 
-export type Lesson = { id: string; title: string; video_url: string; pdf_url: string; category: string; objectives: string[]; prerequisites: string[] };
+export type Lesson = { id: string; title: string; video_url: string; pdf_url: string; content_text?: string; category: string; objectives: string[]; prerequisites: string[] };
 export type Module = { id: string; title: string; lessons: Lesson[] };
 export type Level = { id: string; title: string; prerequisites: string[]; objectives: string[]; modules: Module[] };
 
@@ -13,7 +13,16 @@ const CATALOG = {
         {
           'id': 'b1', 'title': 'Bases du Marché',
           'lessons': [
-            { 'id': 'b1-l1', 'title': 'Introduction au Marché Boursier', 'video_url': 'https://www.youtube.com/embed/p7HKvqRI_Bo', 'pdf_url': '', 'category': 'trading', 'objectives': ['Comprendre les échanges'], 'prerequisites': [] },
+            {
+              'id': 'b1-l1',
+              'title': 'Introduction au Marché Boursier',
+              'video_url': 'https://www.youtube.com/embed/p7HKvqRI_Bo',
+              'pdf_url': '/resources/intro_market.pdf',
+              'content_text': "Le marché boursier est un lieu d'échange où s'achètent et se vendent des parts d'entreprises (actions). C'est le moteur du capitalisme moderne.\\n\\n1. **Pourquoi investir ?** Pour faire fructifier son capital et battre l'inflation.\\n2. **Les acteurs clés :** Les investisseurs institutionnels, les courtiers, et les traders particuliers.\\n3. **Horaires de marché :** New York, Londres, Tokyo.\\n\\nDans cette leçon, nous allons voir comment lire une cote et passer un ordre simple.",
+              'category': 'trading',
+              'objectives': ['Comprendre les échanges'],
+              'prerequisites': []
+            },
             { 'id': 'b1-l2', 'title': 'Les Chandeliers Japonais (Bases)', 'video_url': 'https://www.youtube.com/embed/P0C7H_xVqj0', 'pdf_url': '', 'category': 'trading', 'objectives': ['Lire les bougies'], 'prerequisites': [] },
             { 'id': 'b1-l3', 'title': 'Supports et Résistances', 'video_url': 'https://www.youtube.com/embed/4M3dM9d9w9g', 'pdf_url': '', 'category': 'trading', 'objectives': ['Zones clés'], 'prerequisites': [] },
             { 'id': 'b1-l4', 'title': 'Les Tendances', 'video_url': 'https://www.youtube.com/embed/Yd778p9L58Q', 'pdf_url': '', 'category': 'trading', 'objectives': ['Haut/Bas/Range'], 'prerequisites': [] },

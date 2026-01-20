@@ -80,16 +80,27 @@ const LessonView: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex flex-wrap items-center gap-3 mb-6">
                         <span className="bg-blue-600/20 text-blue-400 text-xs px-2 py-1 rounded uppercase font-bold">{lesson.category}</span>
                         {lesson.prerequisites?.map(p => (
                             <span key={p} className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded border border-slate-700">{t('lesson_view.prereq')}: {p}</span>
                         ))}
+
+                        {lesson.pdf_url && (
+                            <a
+                                href={lesson.pdf_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ml-auto"
+                            >
+                                📄 Télécharger support PDF
+                            </a>
+                        )}
                     </div>
 
                     <h2 className="text-2xl font-bold mb-4">{lesson.title}</h2>
 
-                    <div className="space-y-4 text-slate-300 leading-relaxed">
+                    <div className="space-y-6 text-slate-300 leading-relaxed">
                         <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
                             <h3 className="font-bold text-white mb-2">{t('lesson_view.objectives')}</h3>
                             <ul className="list-disc list-inside space-y-1">
@@ -99,7 +110,18 @@ const LessonView: React.FC = () => {
                             </ul>
                         </div>
 
-                        <p>
+                        {lesson.content_text && (
+                            <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800">
+                                <h3 className="font-bold text-lg text-white mb-4 flex items-center gap-2">
+                                    <span>📝</span> Résumé du Cours
+                                </h3>
+                                <div className="prose prose-invert max-w-none text-slate-300 text-sm whitespace-pre-line">
+                                    {lesson.content_text}
+                                </div>
+                            </div>
+                        )}
+
+                        <p className="text-sm text-slate-400 italic border-t border-slate-800 pt-4 mt-8">
                             {t('lesson_view.welcome')} <strong>{lesson.title}</strong>.
                             {t('lesson_view.deep_dive')} {lesson.category}.
                             {t('lesson_view.prepare')}
