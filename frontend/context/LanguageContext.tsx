@@ -30,23 +30,23 @@ const translations: Record<Language, any> = {
             submitting: 'Logging in...',
             no_account: "Don't have an account yet?",
             start_challenge: 'Start a challenge',
-            signup: {
-                create_account: 'Create Account',
-                title: 'Sign Up for TradeSense AI',
-                subtitle: 'Join thousands of traders mastering the markets with AI assistance.',
-                first_name: 'First Name',
-                last_name: 'Last Name',
-                email: 'Email Address',
-                password: 'Password',
-                confirm_password: 'Confirm Password',
-                phone: 'Phone Number',
-                country: 'Country',
-                creating_account: 'Creating Account...',
-                success: {
-                    title: 'Account Created Successfully!',
-                    message: 'Welcome to TradeSense AI. You\'re being redirected to your dashboard.'
-                }
-            },
+        },
+        signup: {
+            create_account: 'Create Account',
+            title: 'Sign Up for TradeSense AI',
+            subtitle: 'Join thousands of traders mastering the markets with AI assistance.',
+            first_name: 'First Name',
+            last_name: 'Last Name',
+            email: 'Email Address',
+            password: 'Password',
+            confirm_password: 'Confirm Password',
+            phone: 'Phone Number',
+            country: 'Country',
+            creating_account: 'Creating Account...',
+            success: {
+                title: 'Account Created Successfully!',
+                message: 'Welcome to TradeSense AI. You\'re being redirected to your dashboard.'
+            }
         },
         hero: {
             badge: 'New: Prop Firm for Africa',
@@ -354,23 +354,23 @@ const translations: Record<Language, any> = {
             submitting: 'Connexion...',
             no_account: 'Pas encore de compte ?',
             start_challenge: 'Commencer un challenge',
-            signup: {
-                create_account: 'Créer un Compte',
-                title: 'S\'inscrire à TradeSense AI',
-                subtitle: 'Rejoignez des milliers de traders qui maîtrisent les marchés avec l\'assistance de l\'IA.',
-                first_name: 'Prénom',
-                last_name: 'Nom',
-                email: 'Adresse Email',
-                password: 'Mot de passe',
-                confirm_password: 'Confirmer le mot de passe',
-                phone: 'Numéro de téléphone',
-                country: 'Pays',
-                creating_account: 'Création du compte...',
-                success: {
-                    title: 'Compte créé avec succès !',
-                    message: 'Bienvenue chez TradeSense AI. Vous êtes redirigé vers votre tableau de bord.'
-                }
-            },
+        },
+        signup: {
+            create_account: 'Créer un Compte',
+            title: 'S\'inscrire à TradeSense AI',
+            subtitle: 'Rejoignez des milliers de traders qui maîtrisent les marchés avec l\'assistance de l\'IA.',
+            first_name: 'Prénom',
+            last_name: 'Nom',
+            email: 'Adresse Email',
+            password: 'Mot de passe',
+            confirm_password: 'Confirmer le mot de passe',
+            phone: 'Numéro de téléphone',
+            country: 'Pays',
+            creating_account: 'Création du compte...',
+            success: {
+                title: 'Compte créé avec succès !',
+                message: 'Bienvenue chez TradeSense AI. Vous êtes redirigé vers votre tableau de bord.'
+            }
         },
         hero: {
             badge: "Nouveau : Prop Firm pour l'Afrique",
@@ -678,23 +678,23 @@ const translations: Record<Language, any> = {
             submitting: 'جاري تسجيل الدخول...',
             no_account: 'ليس لديك حساب بعد؟',
             start_challenge: 'ابدأ التحدي',
-            signup: {
-                create_account: 'إنشاء حساب',
-                title: 'التسجيل في TradeSense AI',
-                subtitle: 'انضم إلى آلاف المتداولين الذين يتقنون الأسواق بمساعدة الذكاء الاصطناعي.',
-                first_name: 'الاسم الأول',
-                last_name: 'اسم العائلة',
-                email: 'البريد الإلكتروني',
-                password: 'كلمة المرور',
-                confirm_password: 'تأكيد كلمة المرور',
-                phone: 'رقم الهاتف',
-                country: 'البلد',
-                creating_account: 'جاري إنشاء الحساب...',
-                success: {
-                    title: 'تم إنشاء الحساب بنجاح!',
-                    message: 'مرحباً بكم في TradeSense AI. جاري إعادة توجيهك إلى لوحة التحكم الخاصة بك.'
-                }
-            },
+        },
+        signup: {
+            create_account: 'إنشاء حساب',
+            title: 'التسجيل في TradeSense AI',
+            subtitle: 'انضم إلى آلاف المتداولين الذين يتقنون الأسواق بمساعدة الذكاء الاصطناعي.',
+            first_name: 'الاسم الأول',
+            last_name: 'اسم العائلة',
+            email: 'البريد الإلكتروني',
+            password: 'كلمة المرور',
+            confirm_password: 'تأكيد كلمة المرور',
+            phone: 'رقم الهاتف',
+            country: 'البلد',
+            creating_account: 'جاري إنشاء الحساب...',
+            success: {
+                title: 'تم إنشاء الحساب بنجاح!',
+                message: 'مرحباً بكم في TradeSense AI. جاري إعادة توجيهك إلى لوحة التحكم الخاصة بك.'
+            }
         },
         hero: {
             badge: 'جديد: شركة تداول ممولة لإفريقيا',
