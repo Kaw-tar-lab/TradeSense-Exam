@@ -47,7 +47,7 @@ const LandingPage: React.FC = () => {
 
               <LanguageSwitcher />
 
-              {/* <ThemeToggle /> */}
+              <ThemeToggle />
 
               <button
                 onClick={() => navigate('/login')}
