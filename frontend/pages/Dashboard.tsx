@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
   const [markets, setMarkets] = useState<MarketData[]>(INITIAL_MARKET_DATA);
   const [selectedAsset, setSelectedAsset] = useState<MarketData>(INITIAL_MARKET_DATA[0]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-      
+
   // Auto-remove notifications after 5 seconds to prevent UI blocking
   useEffect(() => {
     if (notifications.length > 0) {
@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [notifications]);
-  
+
   const [tradeSize, setTradeSize] = useState<number>(1);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -62,7 +62,7 @@ const Dashboard: React.FC = () => {
       try {
         const data = await getPrice(selectedAsset.symbol);
         if (!mounted || data.price == null) return;
-        
+
         setMarkets(prev => {
           return prev.map(m => m.symbol === selectedAsset.symbol ? {
             ...m,
@@ -86,7 +86,7 @@ const Dashboard: React.FC = () => {
     if (current && current.price !== selectedAsset.price) {
       setSelectedAsset(current);
     }
-    
+
     // Update equity based on latest market prices
     const pricesMap: Record<string, number> = {};
     markets.forEach(m => pricesMap[m.symbol] = m.price);
@@ -125,18 +125,18 @@ const Dashboard: React.FC = () => {
 
   const handleTrade = async (type: 'BUY' | 'SELL') => {
     if (!selectedAsset || isNaN(tradeSize) || tradeSize <= 0 || !challenge) return;
-    
+
     try {
       setIsProcessing(true);
       // Removed the 400ms delay to ensure immediate and stable state transitions
       await executeTrade(selectedAsset, type, tradeSize);
-      
+
       setNotifications(prev => ([
-        { 
-          id: Math.random().toString(36).slice(2), 
-          type: 'SUCCESS', 
-          message: `${type === 'BUY' ? 'BUY' : 'SELL'} ${selectedAsset.symbol} x${tradeSize} ${t('dashboard.trade_executed')}`, 
-          time: Date.now() 
+        {
+          id: Math.random().toString(36).slice(2),
+          type: 'SUCCESS',
+          message: `${type === 'BUY' ? 'BUY' : 'SELL'} ${selectedAsset.symbol} x${tradeSize} ${t('dashboard.trade_executed')}`,
+          time: Date.now()
         },
         ...prev
       ]));
@@ -153,7 +153,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-transparent text-slate-100' : 'bg-slate-50/90 text-slate-900'} flex flex-col transition-colors duration-300`}>
-      
+
       {/* Top Navbar */}
       <nav className={`h-16 border-b flex items-center justify-between px-6 sticky top-0 z-50 backdrop-blur-md ${darkMode ? 'bg-slate-950/80 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
         <div className="flex items-center gap-6">
@@ -173,8 +173,14 @@ const Dashboard: React.FC = () => {
         <div className="flex items-center gap-4">
           <BalanceStatus />
           <div className="hidden md:block h-8 w-px bg-slate-800 mx-2" />
-          <button onClick={() => navigate('/')} className={`text-sm font-bold px-4 py-2 rounded-lg transition-all ${darkMode ? 'bg-white/5 hover:bg-white/10 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>
-            {t('dashboard.exit')}
+          <button
+            onClick={() => {
+              localStorage.removeItem('user');
+              navigate('/');
+            }}
+            className={`text-sm font-bold px-4 py-2 rounded-lg transition-all ${darkMode ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20' : 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'}`}
+          >
+            {t('dashboard.logout') || 'Déconnexion'}
           </button>
         </div>
       </nav>
@@ -214,11 +220,10 @@ const Dashboard: React.FC = () => {
                 <button onClick={resetChallenge} className="text-[10px] text-[#eab308] font-black underline uppercase">{t('dashboard.new_challenge')}</button>
               )}
             </div>
-            <div className={`text-xs w-full px-3 py-2 rounded-xl border flex items-center justify-center gap-2 font-black uppercase tracking-tighter shadow-sm transition-all ${
-              challenge.status === ChallengeStatus.ACTIVE ? (darkMode ? 'bg-[#eab308]/10 border-[#eab308]/20 text-[#eab308]' : 'bg-[#eab308]/20 border-[#eab308]/30 text-yellow-700') :
-              challenge.status === ChallengeStatus.PASSED ? (darkMode ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-600') : 
-              (darkMode ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-red-50 border-red-200 text-red-600')
-            }`}>
+            <div className={`text-xs w-full px-3 py-2 rounded-xl border flex items-center justify-center gap-2 font-black uppercase tracking-tighter shadow-sm transition-all ${challenge.status === ChallengeStatus.ACTIVE ? (darkMode ? 'bg-[#eab308]/10 border-[#eab308]/20 text-[#eab308]' : 'bg-[#eab308]/20 border-[#eab308]/30 text-yellow-700') :
+                challenge.status === ChallengeStatus.PASSED ? (darkMode ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-600') :
+                  (darkMode ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-red-50 border-red-200 text-red-600')
+              }`}>
               <div className={`w-2 h-2 rounded-full bg-current ${challenge.status === ChallengeStatus.ACTIVE ? 'animate-ping' : ''}`} />
               {challenge.status}
             </div>
@@ -227,7 +232,7 @@ const Dashboard: React.FC = () => {
 
         {/* Main Terminal View */}
         <main className={`flex-grow flex flex-col overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-slate-950' : 'bg-slate-100'}`}>
-          
+
           {/* Header & Chart Top Controls */}
           <div className={`px-6 py-4 flex items-center justify-between border-b transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-900/20' : 'border-slate-200 bg-white'}`}>
             <div className="flex items-center gap-4">
@@ -250,7 +255,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="flex-grow flex flex-col p-4 overflow-y-auto space-y-4 custom-scrollbar">
-            
+
             {/* Primary Grid: Chart & Order Entry */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 min-h-[500px]">
               <div className="lg:col-span-3 flex flex-col gap-4">
@@ -281,7 +286,7 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 {/* AI Assistant Quick Access */}
-                <div 
+                <div
                   onClick={() => setActiveModal('IA_CHAT')}
                   className={`border rounded-2xl p-4 cursor-pointer transition-all group ${darkMode ? 'bg-indigo-600/10 border-indigo-500/30 hover:bg-indigo-600/20' : 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100 shadow-sm'}`}
                 >
@@ -315,18 +320,17 @@ const Dashboard: React.FC = () => {
             <div className={`border rounded-2xl overflow-hidden flex flex-col min-h-[400px] transition-colors duration-300 ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-xl'}`}>
               <div className={`flex border-b transition-colors duration-300 ${darkMode ? 'border-slate-800 bg-slate-950/50' : 'border-slate-100 bg-slate-50'}`}>
                 {(['Positions', 'News', 'Social', 'Leaderboard', 'Alerts'] as const).map(tab => (
-                  <button 
-                    key={tab} 
+                  <button
+                    key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all border-b-2 ${
-                      activeTab === tab ? 'border-[#eab308] text-[#eab308] bg-[#eab308]/5' : (darkMode ? 'border-transparent text-slate-500 hover:text-slate-300' : 'border-transparent text-slate-400 hover:text-slate-600')
-                    }`}
+                    className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all border-b-2 ${activeTab === tab ? 'border-[#eab308] text-[#eab308] bg-[#eab308]/5' : (darkMode ? 'border-transparent text-slate-500 hover:text-slate-300' : 'border-transparent text-slate-400 hover:text-slate-600')
+                      }`}
                   >
                     {tab === 'Social' ? t('dashboard.community') : tab === 'Alerts' ? t('dashboard.notifications') : tab}
                   </button>
                 ))}
               </div>
-              
+
               <div className="flex-grow overflow-x-auto p-4">
                 {activeTab === 'Positions' && (
                   <table className="w-full text-left text-xs">
@@ -425,13 +429,13 @@ const Dashboard: React.FC = () => {
         {activeModal === 'LEADERBOARD' && <Leaderboard minimized={false} />}
         {activeModal === 'COMMUNITY' && <CommunityZone minimized={false} />}
         {activeModal === 'IA_CHAT' && (
-          <AIChat 
-            darkMode={darkMode} 
-            contextData={{ 
-              challenge, 
-              selectedAsset, 
-              marketCount: markets.length 
-            }} 
+          <AIChat
+            darkMode={darkMode}
+            contextData={{
+              challenge,
+              selectedAsset,
+              marketCount: markets.length
+            }}
           />
         )}
 
