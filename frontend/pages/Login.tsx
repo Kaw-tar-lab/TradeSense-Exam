@@ -14,37 +14,14 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  /* import { loginUser } from '../services/api'; */ /* Ensure import is added or updated manually if needed, but here we assume it's available or we add it */
-
-  // ... (inside component)
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    try {
-      // Real API Login
-      const { loginUser } = await import('../services/api');
-      const response = await loginUser(email, password);
-
-      if (response.status === 'ok') {
-        // Save user info
-        localStorage.setItem('user', JSON.stringify(response.user));
-        // Navigate to dashboard
-        navigate('/dashboard');
-      } else {
-        alert('Erreur de connexion: ' + (response.error || 'Inconnue'));
-      }
-    } catch (err: any) {
-      console.error(err);
-      let msg = 'Erreur inconnue';
-      if (err.response) {
-        msg = `Server Error: ${err.response.status} - ${JSON.stringify(err.response.data)}`;
-      } else if (err.message) {
-        msg = `Network/Client Error: ${err.message}`;
-      }
-      alert(`Debug Info:\n${msg}\nAPI URL: ${import.meta.env.PROD ? 'PROD Mode' : 'DEV Mode'}`);
-    } finally {
+    // Force success for Demo
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      navigate('/dashboard');
+    }, 1000);
   };
 
   return (
