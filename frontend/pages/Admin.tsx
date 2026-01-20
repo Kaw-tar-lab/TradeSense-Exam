@@ -29,18 +29,13 @@ const Admin: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
-  import { api } from '../services/api';
-
-  // ... (inside component)
-
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      // Use configured API instance
       const { data } = await api.get('/admin/users');
       setUsers(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+    } catch (err: any) {
+      setError(err.message || 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -49,7 +44,7 @@ const Admin: React.FC = () => {
   const handleSeed = async () => {
     try {
       setSeeding(true);
-      const { data } = await api.post('/admin/seed?force=true', {}, {
+      await api.post('/admin/seed?force=true', {}, {
         headers: {
           'X-Seed-Token': 'dev-seed-token'
         }
@@ -57,7 +52,8 @@ const Admin: React.FC = () => {
       alert('Base de données peuplée avec succès !');
       fetchUsers();
     } catch (err: any) {
-      alert(`Erreur: ${err.response?.data?.reason || 'Erreur de connexion'}`);
+      const reason = err.response?.data?.reason || 'Calcul échoué';
+      alert(`Erreur: ${reason}`);
     } finally {
       setSeeding(false);
     }
