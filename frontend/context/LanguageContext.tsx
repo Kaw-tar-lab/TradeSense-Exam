@@ -17,7 +17,7 @@ const translations: Record<Language, any> = {
             learning: 'Learning Center',
             dashboard: 'Access Dashboard',
             login: 'Log In',
-            start_now: 'Start Now',
+            start_now: 'Access Dashboard',
         },
         login: {
             title: 'Log in to your trading account',
@@ -342,7 +342,7 @@ const translations: Record<Language, any> = {
             learning: 'Learning Center',
             dashboard: 'Accéder au Dashboard',
             login: 'Se connecter',
-            start_now: 'Commencer',
+            start_now: 'Accéder au Dashboard',
         },
         login: {
             title: 'Connectez-vous à votre compte de trading',
@@ -667,7 +667,7 @@ const translations: Record<Language, any> = {
             learning: 'مركز التعلم',
             dashboard: 'لوحة التحكم',
             login: 'تسجيل الدخول',
-            start_now: 'ابدأ الآن',
+            start_now: 'دخول لوحة التحكم',
         },
         login: {
             title: 'تسجيل الدخول إلى حساب التداول الخاص بك',
